@@ -1,23 +1,36 @@
 import logo from './logo.svg';
 import './App.css';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import Main from './Main';
+import Home from './Components/Main-Section/Home-Page/Home';
+import ErrorPage from './Components/Main-Section/ErrorPage';
+import Order from './Components/Main-Section/Order-page/Order';
 
 function App() {
+  const route = createBrowserRouter([
+    {
+      path: '/',
+      element: <Main></Main>,
+      children:[
+        {
+          path:'/',
+          loader: async() => fetch('Tshirt.json'),
+          element: <Home></Home>
+        },
+        {
+          path:'/orders',
+          element: <Order></Order>
+        },
+        {
+          path: '*',
+          element: <ErrorPage></ErrorPage>
+        }
+      ]
+    }
+  ])
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <RouterProvider router={route}></RouterProvider>
     </div>
   );
 }
